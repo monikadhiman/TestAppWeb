@@ -1,0 +1,13 @@
+<ul>
+  <li class="active">
+    <a [routerLink]="'/studentdashboard'" routerLinkActive="active" class="nav-link">Dashboard</a>
+  </li>
+  <li class="active">
+    <a [routerLink]="'answer'" routerLinkActive="active" class="nav-link">Question Paper</a>
+  </li>
+  <li class="active">
+    <a [routerLink]="'score'" routerLinkActive="active" class="nav-link">Score Board</a>
+  </li>
+
+  <li><a type="button" (click)='logout()'>Logout</a></li>
+</ul>

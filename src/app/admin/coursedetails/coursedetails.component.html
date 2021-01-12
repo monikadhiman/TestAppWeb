@@ -1,0 +1,160 @@
+<section class="dashboard-wrap mtb-40">
+    <div class="container">
+        <div class="body-content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="dash-header">
+                        <div class="dash-title">
+                            <h1>{{title}}</h1>
+
+                        </div>
+                    </div>
+                    <div class="dash-nav">
+                        <hr>
+                        <a routerLink="/admindashboard"><button class="btn btn-primary"> Back to dashboard </button></a>
+                        <button type="button" class="btn btn-primary float-right" (click)="openModal(template)">Add Course</button>
+
+                        <ng-template #template>
+                            <div class="modal-header">
+                                <h4 class="modal-title pull-left">Add Course</h4>
+                                <button type="button" class="close pull-right" aria-label="Close" (click)="closeMe()">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                            </div>
+                            <div class="modal-body ">
+                                <div *ngIf="alert" class="alert alert-success alert-dismissible fade show" role="alert">
+                                    <strong>{{resMsg}}</strong>{{modalMessage}}
+                                    <button (click)="closeAlert()" type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                                </div>
+
+                                <form autocomplete="off" [formGroup]='insertForm' (ngSubmit)="onSubmit(insertForm)">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="cName"><i class="fa fa-pencil-square-o"></i></span>
+                                                </div>
+                                                <input type="text" id="courseName" formControlName="courseName" class="form-control" placeholder="Course Name" (focus)="onChangeEvent($event)" aria-label="courseName" aria-describedby="courseName" autofocus required maxlength="30">
+                                            </div>
+                                            <div class="errorMessage" *ngIf="!insertForm.get('courseName').valid && (insertForm.get('courseName').dirty || insertForm.get('courseName').touched)">
+                                                Please enter Course Name
+                                                <br />
+                                                <span class="errorMessage" *ngIf="insertForm.get('courseName').hasError('maxlength')">Only 30 characters
+                                allowed for
+                                Course Name.</span>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <button [disabled]='!insertForm.valid' type="submit" class="btn btn-primary btn-block">ADD</button>
+                                        </li>
+                                    </ul>
+                                </form>
+                            </div>
+                        </ng-template>
+                    </div>
+                    <br /><br />
+                    <div *ngIf="delStatus ; then thenBlock else elseBlock"> </div>
+                    <ng-template #thenBlock>
+                        <h2>{{status}}</h2>
+                    </ng-template>
+                    <ng-template #elseBlock>
+                        <table class="table table-hover table-bordered ">
+                            <thead>
+                                <tr class="bg-primary">
+                                    <th>#ID</th>
+                                    <th>Course Name</th>
+                                    <th>Is Active</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let c of course | paginate: {id: 'listing_pagination', itemsPerPage: 5, currentPage: page, totalItems: totalRecords}">
+                                    <td>{{c.cId}}</td>
+                                    <td>{{c.cName}}</td>
+                                    <td>{{c.isActive}}</td>
+                                    <td>
+                                        <div class="btn-group mt-2" role="group">
+                                            <!-- <button type="button" class="btn btn-success" ><i class="fas fa-list"></i></button> -->
+                                            <button type="button" class="btn btn-primary" (click)="onUpdateModal(c)"><i class="fas fa-edit"></i></button>
+                                            <!-- <button type="button" class="btn btn-danger" (click)="DeleteCourse(c.cId)"><i
+                                                class="fas fa-trash-alt"></i></button> -->
+                                            &nbsp;&nbsp;
+                                            <ui-switch size="small" color="#0066ff" switchColor="white" defaultBgColor="#e6f0ff" (click)="DeleteCourse(c.cId)" [checked]="c.isActive"></ui-switch>
+
+                                        </div>
+                                    </td>
+                                    <!-- <td class="action">
+                                                      <a [routerLink]="['/admin/post/edit', post.Id]" class="btn btn-info btn-sm">Edit</a>
+                                                      <a (click)="onDelete(post.Id)" class="btn btn-danger btn-sm">Delete</a>
+                                                    </td> -->
+                                </tr>
+                            </tbody>
+
+                        </table>
+
+                        <pagination-controls id="listing_pagination" maxSize="5" directionLinks="true" (pageChange)="page = $event"></pagination-controls>
+                        <!-- {{error}} -->
+                        <!-- EDIT PRODUCT MODAL START-->
+                    </ng-template>
+                    <ng-template #editTemplate>
+                        <div class="modal-header">
+                            <h4 class="modal-title pull-left">Edit Course</h4>
+                            <button type="button" class="close pull-right" aria-label="Close" (click)="closeMe()">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                        </div>
+                        <div class="modal-body ">
+                            <div *ngIf="alert" class="alert alert-success alert-dismissible fade show" role="alert">
+                                <strong>{{resMsg}}</strong>{{modalMessage}}
+                                <button (click)="closeAlert2()" type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                            </div>
+
+                            <form autocomplete="off" [formGroup]='updateForm' (ngSubmit)="onUpdate()">
+                                <ul class="list-group">
+                                    <li class="list-group-item" [hidden]="cId">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="cId"><i class="fa fa-key"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control" formControlName="cId" />
+                                        </div>
+
+                                    </li>
+
+                                    <li class="list-group-item">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="cName"><i class="fa fa-pencil-square-o"></i></span>
+                                            </div>
+                                            <input type="text" id="cName" (focus)="onChangeEvent($event)" formControlName="cName" class="form-control" placeholder="Course Name" aria-label="cName" aria-describedby="cName" autofocus required maxlength="30">
+                                        </div>
+                                        <div class="errorMessage" *ngIf="!updateForm.get('cName').valid && (updateForm.get('cName').dirty || updateForm.get('cName').touched)">
+                                            Please enter Course Name
+                                            <br />
+                                            <span class="errorMessage" *ngIf="updateForm.get('cName').hasError('maxlength')">Only 30 characters
+                              allowed for
+                              Course Name.</span>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <button [disabled]='!updateForm.valid' type="submit" class="btn btn-primary btn-block">Update</button>
+                                    </li>
+                                </ul>
+                            </form>
+                        </div>
+                    </ng-template>
+
+                    <!-- EDIT PRODUCT MODAL END-->
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</section>

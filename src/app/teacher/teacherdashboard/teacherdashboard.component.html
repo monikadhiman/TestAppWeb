@@ -1,0 +1,55 @@
+<section class="dashboard-wrap mtb-40">
+  <div class="container">
+    <div class="body-content">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="dash-left">
+            <app-navbarteacher></app-navbarteacher>
+          </div>
+        </div>
+        <div class="col-md-9">
+          <div class="dash-right">
+            <div class="dash-header">
+              <div class="dash-title">
+                <h1>{{title | titlecase}}</h1>
+                <h5>Welcome {{fullName | uppercase}} </h5>
+              </div>
+            </div>
+
+            <div class="dash-header">
+              <div class="dash-title" *ngIf="status; then thenBlock else elseBlock" >
+
+              </div>
+            </div>
+                <ng-template #thenBlock>
+                  <h3>Data not Available</h3>
+                </ng-template>
+                <ng-template #elseBlock>
+                  <table class="table table-bordered table-striped">
+                    <tr>
+                      <th>#ID</th>
+                      <th>Full Name</th>
+                      <th>Course Name</th>
+                      <th>Subject Name</th>
+                      <th>Is Active</th>
+
+                    </tr>
+                    <tr *ngFor="let detail of details">
+                      <td>{{detail.aId}}</td>
+                      <td>{{detail.fullName}}</td>
+                      <td>{{detail.cName}}</td>
+                      <td>{{detail.subName}}</td>
+                      <td>{{detail.isActive}}</td>
+
+                    </tr>
+                  </table>
+                </ng-template>
+
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>

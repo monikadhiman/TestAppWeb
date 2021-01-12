@@ -1,0 +1,99 @@
+<div class="container signLog">
+  <div class="row">
+    <div class="col-md-12 signLog-inner">
+      <h2 style="text-align: center;">{{title}}</h2>
+      <hr />
+      <div *ngIf="alert" class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>{{status}}</strong>&nbsp;{{message}}
+        <button (click)="closeAlert()" type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <form autocomplete="off" [formGroup]="regForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <div class="form-row">
+            <div class="col-md-2">
+              <label for="fullName" class="text-uppercase">First Name<span class="required">*</span></label>
+            </div>
+            <div class="col-md-5">
+              <input type="text" id="fullName" (focus)="onChangeEvent($event)"  formControlName="fullName" class="form-control"
+                placeholder="Name should not be greater than 10 characters"  autofocus required minlength="5"
+                maxlength="50">
+            </div>
+            <div class="col-md-5">
+              <span class="errorMessage" *ngIf="fullName.touched && fullName.errors">
+                  <span *ngIf="fullName.hasError('required')">Full Name is required.</span>
+                  <span  *ngIf="fullName.hasError('maxlength')">Only 50 characters
+                    allowed for Name.</span>
+                  <span *ngIf="regForm.get('fullName').hasError('minlength')">Atleast 5 characters
+                    needed for Name.</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="form-row">
+            <div class="col-md-2">
+              <label for="email" class="text-uppercase">Email<span class="required">*</span></label>
+            </div>
+            <div class="col-md-5">
+              <input type="text" id="email" formControlName="email" class="form-control" placeholder="abc@gmail.com"
+                required email>
+            </div>
+            <div class="col-md-5">
+              <span class="errorMessage" *ngIf="email.touched && email.errors">
+                  <span *ngIf="email.hasError('required')">Email is required.</span>
+                  <span *ngIf="email.hasError('email')">Please provide valid email.</span>
+              </span>
+
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="form-row">
+            <div class="col-md-2">
+              <label for="password" class="text-uppercase">Password<span class="required">*</span></label>
+            </div>
+            <div class="col-md-5">
+              <input type="password" id="password" formControlName="password" class="form-control" placeholder="*****"
+                required minlength="5" maxlength="10" >
+            </div>
+            <div class="col-md-5">
+              <span class="errorMessage" *ngIf="password.touched && password.errors">
+                  <span *ngIf="password.hasError('required')">Password is required.</span>
+                  <span *ngIf="password.hasError('maxlength')">Only 10 characters allowed for password.</span>
+                  <span *ngIf="password.hasError('minlength')">Atleast 5 characters needed for password.</span>
+                  <span *ngIf="password.hasError('mustMatch')">Confirm Password Must Match.</span>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="form-row">
+            <div class="col-md-2">
+              <label for="cpassword" class="text-uppercase">Confirm-Password<span class="required">*</span></label>
+            </div>
+            <div class="col-md-5">
+              <input type="text" id="cpassword" formControlName="cpassword" class="form-control"
+                placeholder="Re enter password" required minlength="5" maxlength="10" reverse="true" validateEqual="password">
+            </div>
+            <div class="col-md-5">
+              <span class="errorMessage" *ngIf="cpassword.touched && cpassword.errors">
+                  <span *ngIf="cpassword.hasError('required')">Confirm Password is required.</span>
+                  <span *ngIf="cpassword.hasError('mustMatch')">Password Must Match.</span>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="nav justify-content-center">
+            <button type="submit"  class="btn btn-primary" >Register</button>&nbsp;
+            <button type="button" (click)="onClick()" class="btn btn-danger">Reset</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,284 @@
+<section class="dashboard-wrap mtb-40">
+  <div class="container">
+    <div class="body-content">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="dash-header">
+            <div class="dash-title">
+              <h1>{{title}}</h1>
+
+            </div>
+          </div>
+          <div class="dash-nav">
+            <hr>
+            <button class="btn btn-primary" (click)="onClick()">Back to dashboard </button>
+            <button type="button" class="btn btn-primary float-right" (click)="openModal(template)">Add Question</button>
+            <ng-template #template>
+              <div class="modal-header">
+                <h4 class="modal-title pull-left">Add Question</h4>
+                <button type="button" class="close pull-right" aria-label="Close" (click)="close()">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body ">
+                <div *ngIf="alert" class="alert alert-success alert-dismissible fade show" role="alert">
+                  <strong>STATUS:- </strong>{{modalMessage}}
+                  <button (click)="closeAlert()" type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+
+                <form autocomplete="off" [formGroup]="insertForm" (ngSubmit)="onSubmit(insertForm)">
+                  <ul class="list-group">
+                    <li class="list-group-item">
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="tstId"><i class="fa fa-pencil-square-o"></i></span>
+                        </div>
+                        <select id="tstId" formControlName="tstId" (focus)="onChangeEvent($event)"  class="form-control" (change)="changetestId($event)"  required>
+                          <option value='' selected disabled>Select Test</option>
+                           <option *ngFor="let item of testid" value="{{item.tstName}}">{{item.tstName}}</option>
+                        </select>
+                      </div>
+                      <div class="errorMessage"
+                        *ngIf="!insertForm.get('tstId').valid && (insertForm.get('tstId').dirty || insertForm.get('tstId').touched)">
+                        Please
+                        Choose Test Name
+                       </div>
+                    </li>
+                    <li class="list-group-item">
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="cId"><i class="fa fa-pencil-square-o"></i></span>
+                        </div>
+                        <select id="cId" formControlName="cId" class="form-control"  (change)="changecId($event)"  required>
+                          <option value='' selected disabled>Select Course</option>
+                          <option *ngFor="let course of courseid" value="{{course.cId}}">{{course.cName}}</option>
+                        </select>
+                      </div>
+                      <div class="errorMessage"
+                        *ngIf="!insertForm.get('cId').valid && (insertForm.get('cId').dirty || insertForm.get('cId').touched)">
+                        Please
+                        Choose Course Name
+                      </div>
+
+                    </li>
+                    <li class="list-group-item">
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="subId"><i class="fa fa-pencil-square-o"></i></span>
+                        </div>
+                        <select id="subId" formControlName="subId" class="form-control" (change)="changesubId($event)"  required>
+                          <option value='' selected disabled>Select Subject</option>
+                          <option *ngFor="let sub of subid" value="{{sub.subId}}">{{sub.subName}}</option>
+                        </select>
+                      </div>
+                      <div class="errorMessage"
+                        *ngIf="!insertForm.get('subId').valid && (insertForm.get('subId').dirty || insertForm.get('subId').touched)">
+                        Please
+                        Choose Subject Name
+                      </div>
+                    </li>
+
+                   <li class="list-group-item">
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="ques"><i class="fa fa-pencil-square-o"></i></span>
+                        </div>
+                        <input type="text" id="ques" formControlName="ques" class="form-control"
+                          placeholder="Question" aria-label="ques" aria-describedby="ques"  required
+                          maxlength="100">
+                      </div>
+
+                      <div class="errorMessage"
+                        *ngIf="!insertForm.get('ques').valid && (insertForm.get('ques').dirty || insertForm.get('ques').touched)">
+                        Please
+                        Enter Question Name
+                        <br />
+                        <span class="errorMessage" *ngIf="insertForm.get('ques').hasError('maxlength')">Only 100
+                          characters
+                          allowed for
+                          Question.</span>
+                      </div>
+                    </li>
+                    <li class="list-group-item">
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="opt1"><i class="fa fa-pencil-square-o"></i></span>
+                        </div>
+                        <input type="text" id="opt1" formControlName="opt1" class="form-control" placeholder="Option 1" aria-label="opt1"
+                          aria-describedby="opt1" autofocus required maxlength="100">
+                      </div>
+
+                      <div class="errorMessage"
+                        *ngIf="!insertForm.get('opt1').valid && (insertForm.get('opt1').dirty || insertForm.get('opt1').touched)">
+                        Please
+                        Enter Option 1
+                        <br />
+                        <span class="errorMessage" *ngIf="insertForm.get('opt1').hasError('maxlength')">Only 100
+                          characters
+                          allowed for
+                          Option1 .</span>
+                      </div>
+                    </li>
+                      <li class="list-group-item">
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text" id="opt2"><i class="fa fa-pencil-square-o"></i></span>
+                          </div>
+                          <input type="text" id="opt2" formControlName="opt2" class="form-control" placeholder="Option 2" aria-label="opt2"
+                            aria-describedby="opt2" autofocus required maxlength="100">
+                        </div>
+
+                        <div class="errorMessage"
+                          *ngIf="!insertForm.get('opt2').valid && (insertForm.get('opt2').dirty || insertForm.get('opt2').touched)">
+                          Please
+                          Enter Option 2
+                          <br />
+                          <span class="errorMessage" *ngIf="insertForm.get('opt2').hasError('maxlength')">Only 100
+                            characters
+                            allowed for
+                            Option2 .</span>
+                        </div>
+                      </li>
+                    <li class="list-group-item">
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="opt3"><i class="fa fa-pencil-square-o"></i></span>
+                        </div>
+                        <input type="text" id="opt3" formControlName="opt3" class="form-control" placeholder="Option 3" aria-label="opt3"
+                          aria-describedby="opt3" autofocus required maxlength="100">
+                      </div>
+
+                      <div class="errorMessage"
+                        *ngIf="!insertForm.get('opt3').valid && (insertForm.get('opt3').dirty || insertForm.get('opt3').touched)">
+                        Please
+                        Enter Option 3
+                        <br />
+                        <span class="errorMessage" *ngIf="insertForm.get('opt3').hasError('maxlength')">Only 100
+                          characters
+                          allowed for
+                          Option3 .</span>
+                      </div>
+                    </li>
+                    <li class="list-group-item">
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="opt4"><i class="fa fa-pencil-square-o"></i></span>
+                        </div>
+                        <input type="text" id="opt4" formControlName="opt4" class="form-control" placeholder="Option 4" aria-label="opt4"
+                          aria-describedby="opt4" autofocus required maxlength="100">
+                      </div>
+
+                      <div class="errorMessage"
+                        *ngIf="!insertForm.get('opt4').valid && (insertForm.get('opt4').dirty || insertForm.get('opt4').touched)">
+                        Please
+                        Enter Option 4
+                        <br />
+                        <span class="errorMessage" *ngIf="insertForm.get('opt4').hasError('maxlength')">Only 100
+                          characters
+                          allowed for
+                          Option4 .</span>
+                      </div>
+                    </li>
+                    <li class="list-group-item">
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="answer"><i class="fa fa-pencil-square-o"></i></span>
+                        </div>
+                        <input type="text" id="answer" formControlName="answer" class="form-control" placeholder="Answer" aria-label="answer"
+                          aria-describedby="answer" autofocus required >
+                      </div>
+
+                      <div class="errorMessage"
+                        *ngIf="!insertForm.get('answer').valid && (insertForm.get('answer').dirty || insertForm.get('answer').touched)">
+                        Please
+                        Enter Answer
+                        <br />
+
+                      </div>
+                    </li>
+                     <li class="list-group-item">
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="mark"><i class="fa fa-pencil-square-o"></i></span>
+                        </div>
+                        <input type="text" id="mark" formControlName="mark" class="form-control" placeholder="mark"
+                          aria-label="mark" aria-describedby="mark" autofocus required >
+                      </div>
+
+                      <div class="errorMessage"
+                        *ngIf="!insertForm.get('mark').valid && (insertForm.get('mark').dirty || insertForm.get('mark').touched)">
+                        Please
+                        Enter Marks
+
+                      </div>
+                    </li>
+
+
+                    <li class="list-group-item">
+                      <button type="submit" [disabled]="!insertForm.valid"
+                        class="btn btn-primary btn-block">ADD</button>
+                    </li>
+                  </ul>
+                </form>
+              </div>
+            </ng-template>
+
+
+          <br /><br />
+
+
+          <ng-container *ngIf="delStatus; then thenTemplate; else elseTemplate"></ng-container>
+          <!-- <div *ngIf="delStatus ; then thenBlock else elseBlock"> </div> -->
+          <ng-template #thenTemplate>
+            <h2>{{status1}}</h2>
+          </ng-template>
+          <ng-template #elseTemplate>
+            <h5>Question Details</h5>
+            <table class="table table-hover table-bordered ">
+              <thead>
+                <tr class="bg-primary">
+
+              <th>#ID</th>
+              <th>Question</th>
+              <th>Option1 </th>
+              <th>Option2 </th>
+              <th>Option3 </th>
+              <th>Option4 </th>
+              <th>Answer</th>
+              <th>Test Name</th>
+              <th>Mark</th>
+              <th>Actions</th>
+            </tr>
+              </thead>
+              <tbody>
+            <tr *ngFor= "let c of quesdata  | paginate: {id: 'listing_pagination', itemsPerPage: 3, currentPage: page, totalItems: totalRecords}">
+              <td>{{c.quesId}}</td>
+              <td>{{c.ques}}</td>
+              <td>{{c.opt1}}</td>
+              <td>{{c.opt2}}</td>
+              <td>{{c.opt3}}</td>
+              <td>{{c.opt4}}</td>
+              <td>{{c.answer}}</td>
+              <td>{{c.tstName}}</td>
+              <td>{{c.mark}}</td>
+              <td>
+                <button type="button" class="btn btn-danger" (click)="deleteQuestion(c.quesId)"><i class="fas fa-trash-alt"></i></button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+<pagination-controls id="listing_pagination" maxSize="5" directionLinks="true" (pageChange)="page = $event">
+</pagination-controls>
+</ng-template>
+          <!-- {{error}} -->
+        </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</section>

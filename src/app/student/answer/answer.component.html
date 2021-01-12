@@ -1,0 +1,109 @@
+<section class="dashboard-wrap mtb-40">
+  <div class="container">
+    <div class="body-content">
+
+      <div class="row">
+        <div class="col-md-12">
+          <button class="btn btn-primary" (click)="onClick()">Back to dashboard </button>
+
+          <h1 style="text-align: center;">{{title | uppercase}}</h1>
+          <h2 style="text-align: center;">{{fullName | uppercase}}</h2>
+          <br/>
+<hr/>
+              <div class="row">
+                  <div class="col-md-3">
+                    <b>Class: </b>{{course}}
+                  </div>
+                  <div class="col-md-6">
+                    <b>Choose Subject: </b>
+                    <select id="Id" (change)="changeSubject($event)">
+                      <option value='' selected disabled>Select Subject</option>
+                        <option *ngFor="let item of subject" value="{{item.subId}}">{{item.subName}}</option>
+
+                    </select>
+                    <!-- <select>
+                      <option value="" disabled selected>Choose your option</option>
+                      <option value="1">Option 1</option>
+                      <option value="2">Option 2</option>
+                      <option value="3">Option 3</option>
+                    </select> -->
+                  </div>
+                  <div class="col-md-3">
+                      <b>Email: </b>{{email}}
+                  </div>
+              </div>
+              <hr/>
+<br />
+<br>
+        </div>
+
+
+          <div class="dash-nav" >
+            <div *ngIf="status; then thenBlock else elseBlock"></div>
+             <ng-template #thenBlock>
+                <h2 style="text-align:center;">Choose Your Subject For Online Test</h2>
+            </ng-template>
+
+              <ng-template #elseBlock>
+                <form [formGroup]="userForm">
+                  <div class="row" *ngIf="stuService.qns && this.stuService.qnProgress != 10">
+                    <div class="col s8 offset-s2">
+                      <span> Time Elapsed: {{stuService.displayTimeElapsed()}}</span>
+                      <div class="progress">
+                        <div class="progress-bar" role="progressbar" [style.width.%]="(stuService.qnProgress)*10" aria-valuenow="25" aria-valuemin="0"
+                          aria-valuemax="100"></div>
+                      </div>
+                      <div class="card" style="width: 18rem;">
+                        <div class="card-body">
+                          <h5 class="card-title">{{stuService.qnProgress+1 +'. '}}  {{stuService.qns[stuService.qnProgress].ques}}</h5>
+                          <!-- <h6 class="card-subtitle mb-2 text-muted"></h6> -->
+                          <!-- <p class="card-text"></p> -->
+                          <div class="card-body">
+                            <ul >
+                              <ng-container  *ngFor ="let option of stuService.qns[stuService.qnProgress].options; let i = index">
+                                  <li ><a *ngIf = "option != null" (click)="Answer(stuService.qns[stuService.qnProgress].quesId, i)">{{option}}</a>
+
+                                  </li>
+
+                              </ng-container>
+
+                            </ul>
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- <table class="table table-bordered table-striped">
+                    <div class="row" formArrayName="question">
+                      <div class="col-md-12" *ngFor="let control of questionArray.controls; index as i" [formGroupName]= "i">
+                          <tr >
+                            <td colspan="2">
+                              <span style="border: 0px; font-size: xx-large; font-weight: 600;">{{i+1}}. </span>
+                              <input type="text"  value="{{ this.quesdata[i].ques}}" readonly style="border: 0px; font-size: xx-large; font-weight: 600;" />
+
+
+                            </td>
+                          </tr>
+
+                      </div>
+                      </div>
+
+                    <button type="submit" (click)="submitHandler()" class="btn btn-primary">Submit</button>
+                  </table> -->
+
+                </form>
+              </ng-template>
+
+          </div>
+
+    </div>
+
+
+
+
+  </div>
+</div>
+
+
+</section>

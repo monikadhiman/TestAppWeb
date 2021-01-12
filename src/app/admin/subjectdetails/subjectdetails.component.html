@@ -1,0 +1,209 @@
+<section class="dashboard-wrap mtb-40">
+  <div class="container">
+    <div class="body-content">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="dash-header">
+            <div class="dash-title">
+              <h1>{{title}}</h1>
+
+            </div>
+          </div>
+          <div class="dash-nav">
+            <hr>
+            <a routerLink="/admindashboard"><button class="btn btn-primary"> Back to dashboard </button></a>
+            <button type="button" class="btn btn-primary float-right" (click)="openModal(template)">Add Subject</button>
+
+            <ng-template #template>
+              <div class="modal-header">
+                <h4 class="modal-title pull-left">Add Subject</h4>
+                <button type="button" class="close pull-right" aria-label="Close" (click)="closeAlert2()">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body ">
+                <div *ngIf="alert" class="alert alert-success alert-dismissible fade show" role="alert">
+                  <strong>{{warning}}</strong>{{modalMessage}}
+                  <button (click)="closeMe()" type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+
+                <form autocomplete="off" [formGroup]='insertForm' (ngSubmit)="onSubmit(insertForm)">
+                  <ul class="list-group">
+                    <li class="list-group-item">
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="cId"><i class="fa fa-pencil-square-o"></i></span>
+                        </div>
+                        <select id="cId" (focus)="onChangeEvent($event)" formControlName="cId" class="form-control" (change)="changeCourse($event)" required>
+                          <option value='' selected disabled>Select Course</option>
+
+                          <option *ngFor="let item of course" value="{{item.cId}}">{{item.cName}}</option>
+
+
+                        </select>
+                      </div>
+                      <div class="errorMessage"
+                        *ngIf="!insertForm.get('cId').valid && (insertForm.get('cId').dirty || insertForm.get('cId').touched)">
+                        Please
+                        Choose Course
+
+
+                      </div>
+                    </li>
+                    <li class="list-group-item">
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="subName"><i class="fa fa-pencil-square-o"></i></span>
+                        </div>
+                        <input type="text" id="subName" (focus)="onChangeEvent($event)" formControlName="subName" class="form-control"
+                          placeholder="Subject Name" aria-label="subName" aria-describedby="subName" autofocus
+                          required maxlength="50">
+                      </div>
+                      <div class="errorMessage"
+                        *ngIf="!insertForm.get('subName').valid && (insertForm.get('subName').dirty || insertForm.get('subName').touched)">
+                        Please
+                        enter Subject Name
+                        <br />
+                        <span class="errorMessage" *ngIf="insertForm.get('subName').hasError('subName')">Only 50
+                          characters
+                          allowed for
+                          Subject Name.</span>
+                      </div>
+                    </li>
+
+                    <li class="list-group-item">
+                      <button [disabled]='!insertForm.valid' type="submit"
+                        class="btn btn-primary btn-block">ADD</button>
+                    </li>
+                  </ul>
+                </form>
+              </div>
+            </ng-template>
+          </div>
+          <br /><br />
+          <div *ngIf="delStatus ; then thenBlock else elseBlock"> </div>
+          <ng-template #thenBlock>
+              <h2>{{status}}</h2>
+          </ng-template>
+          <ng-template #elseBlock>
+            <table class="table table-hover table-bordered ">
+              <thead>
+                <tr class="bg-primary">
+                  <th>#ID</th>
+                   <th>Course Name</th>
+                  <th>Subject Name</th>
+                  <th>Is Active</th>
+
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                  <tr *ngFor="let s of subject  | paginate: {id: 'listing_pagination', itemsPerPage: 5, currentPage: page, totalItems: totalRecords}">
+                    <td>{{s.subId}}</td>
+                    <td>{{s.cName}}</td>
+                    <td>{{s.subName}}</td>
+                    <td>{{s.isActive}}</td>
+                    <td>
+                      <div class="btn-group mt-2" role="group">
+                        <button type="button" class="btn btn-primary" (click)="onUpdateModal(s)"><i
+                            class="fas fa-edit"></i></button>
+                        <!-- <button type="button" class="btn btn-danger" (click)="DeleteSubject(s.subId)"><i
+                            class="fas fa-trash-alt"></i></button> -->
+                        <ui-switch size="small" color="#0066ff" switchColor="white" defaultBgColor="#e6f0ff" (click)="DeleteSubject(s.subId)"
+                          [checked]="s.isActive"></ui-switch>
+                      </div>
+                    </td>
+
+                  </tr>
+              </tbody>
+
+            </table>
+            <pagination-controls id="listing_pagination" maxSize="5" directionLinks="true" (pageChange)="page = $event">
+            </pagination-controls>
+          </ng-template>
+
+          <!-- {{error}} -->
+          <ng-template #editTemplate>
+            <div class="modal-header">
+              <h4 class="modal-title pull-left">Edit Subject</h4>
+              <button type="button" class="close pull-right" aria-label="Close" (click)="closeAlert2()">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body ">
+              <div *ngIf="alert" class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>Success!</strong>{{modalMessage}}
+                <button (click)="closeMe()" type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+
+              <form autocomplete="off" [formGroup]='updateForm' (ngSubmit)="onUpdate()" >
+                <ul class="list-group">
+                  <li class="list-group-item" [hidden]="subId" >
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="subId"><i class="fa fa-key"></i></span>
+                      </div>
+                      <input type="text" class="form-control" formControlName="subId" />
+                    </div>
+
+                  </li>
+                  <li class="list-group-item">
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="courseId"><i class="fa fa-pencil-square-o"></i></span>
+                      </div>
+                      <select id="courseId" formControlName="courseId" class="form-control" (change)="changeCourse($event)" required>
+                        <option value='' selected disabled>Select Course</option>
+
+                        <option *ngFor="let item of course" value="{{item.cId}}">{{item.cName}}</option>
+
+
+
+                      </select>
+                    </div>
+                    <div class="errorMessage"
+                      *ngIf="!updateForm.get('courseId').valid && (updateForm.get('courseId').dirty || updateForm.get('courseId').touched)">
+                      Please
+                      Choose Course
+
+
+                    </div>
+                  </li>
+                  <li class="list-group-item">
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="subjectName"><i class="fa fa-pencil-square-o"></i></span>
+                      </div>
+                      <input type="text" id="subjectName" formControlName="subjectName" class="form-control" placeholder="Subject Name"
+                        aria-label="subjectName" aria-describedby="subjectName" autofocus required maxlength="50">
+                    </div>
+                    <div class="errorMessage"
+                      *ngIf="!updateForm.get('subjectName').valid && (updateForm.get('subjectName').dirty || updateForm.get('subjectName').touched)">
+                      Please
+                      enter Subject Name
+                      <br />
+                      <span class="errorMessage" *ngIf="updateForm.get('subjectName').hasError('subjectName')">Only 50
+                        characters
+                        allowed for
+                        Subject Name.</span>
+                    </div>
+                  </li>
+
+                  <li class="list-group-item">
+                    <button  type="submit" class="btn btn-primary btn-block">Update</button>
+                  </li>
+                </ul>
+              </form>
+            </div>
+          </ng-template>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</section>

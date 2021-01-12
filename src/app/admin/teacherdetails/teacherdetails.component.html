@@ -1,0 +1,301 @@
+<section class="dashboard-wrap mtb-40">
+  <div class="container">
+    <div class="body-content">
+      <div class="row">
+        <div class="col-md-12">
+            <div class="dash-header">
+              <div class="dash-title">
+                <h1></h1>
+                <h5> </h5>
+              </div>
+            </div>
+            <div class="dash-nav">
+
+                <a routerLink="/admindashboard"><button class="btn btn-primary"> Back to dashboard </button></a>
+                <button type="button" class="btn btn-primary float-right" (click)="openModal(template)">Add Teacher</button>
+                <ng-template #template>
+                  <div class="modal-header">
+                    <h4 class="modal-title pull-left">Assign Subject To Teacher</h4>
+                    <button type="button" class="close pull-right" aria-label="Close" (click)="closeAlert2()">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+
+                  <div class="modal-body">
+                      <div *ngIf="alert" class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong>{{status}}</strong>{{modalMessage}}
+                        <button (click)="closeMe()" type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+
+                      </div>
+                    <form autocomplete="off" [formGroup]='insertForm' (ngSubmit)="onSubmit(insertForm)"  >
+                      <ul class="list-group">
+                        <li class="list-group-item">
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text" id="uId"><i class="fa fa-pencil-square-o"></i></span>
+                            </div>
+                            <select id="uId" (focus)="onChangeEvent($event)" formControlName="uId" class="form-control" (change)="changeUid($event)" required>
+                              <option value='' selected disabled>Select Teacher</option>
+
+                              <option *ngFor="let item of activeTeacher" value="{{item.uId}}">{{item.fullName}}</option>
+
+
+                            </select>
+                          </div>
+                          <div class="errorMessage"
+                            *ngIf="!insertForm.get('uId').valid && (insertForm.get('uId').dirty || insertForm.get('uId').touched)">
+                            Please
+                            Select  Teacher
+
+
+                          </div>
+                        </li>
+                        <li class="list-group-item">
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text" id="cId"><i class="fa fa-pencil-square-o"></i></span>
+                            </div>
+                            <select id="cId" formControlName="cId" class="form-control" (change)="changeCourse($event)" required>
+                             <option value='' selected disabled>Select Course</option>
+
+
+                              <option *ngFor="let item of allCourse" value="{{item.cId}}">{{item.cName}}</option>
+
+
+                            </select>
+                          </div>
+                          <div class="errorMessage"
+                            *ngIf="!insertForm.get('cId').valid && (insertForm.get('cId').dirty || insertForm.get('cId').touched)">
+                            Please
+                            Select Course
+
+
+                          </div>
+                        </li>
+                        <li class="list-group-item">
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text" id="subId"><i class="fa fa-pencil-square-o"></i></span>
+                            </div>
+                            <select id="subId" formControlName="subId" class="form-control" (change)="changeSubject($event)">
+                              <option value='' selected disabled>Select Subject</option>
+
+                              <option *ngFor="let item of allSubject" value="{{item.subId}}">{{item.subName}}</option>
+
+
+                            </select>
+                          </div>
+                          <div class="errorMessage"
+                            *ngIf="!insertForm.get('subId').valid && (insertForm.get('subId').dirty || insertForm.get('subId').touched)">
+                            Please
+                            Choose Subject
+
+
+                          </div>
+                        </li>
+                        <li class="list-group-item">
+                          <button type="submit" [disabled]="!insertForm.valid" class="btn btn-primary btn-block">Add</button>
+                        </li>
+                      </ul>
+                    </form>
+                  </div>
+                </ng-template>
+            </div>
+        </div>
+
+          <hr>
+          <br />
+          <br />
+          <br />
+              <div  *ngIf="msgStatus; then thenBlock else elseBlock"></div>
+
+              <ng-template #thenBlock>
+                <h5 style="text-align: center;">{{msg}}</h5>
+              </ng-template>
+
+
+
+                <ng-template #elseBlock>
+
+                <h2 style="text-align: center;">Pending Teacher for Role</h2>
+                <table class="table table-hover table-bordered ">
+                <thead>
+                  <tr class="bg-primary">
+                    <th>#ID</th>
+                    <th>Teacher Name</th>
+
+                    <th>Is Active</th>
+                    <th>Actions</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr *ngFor="let t of teacher | paginate: {id: 'listing_pagination', itemsPerPage: 3, currentPage: page, totalItems: totalRecords}">
+                    <td>{{t.uId}}</td>
+                    <td>{{t.fullName}}</td>
+
+                    <td>{{t.isActive}}</td>
+                    <td>
+                      <div class="btn-group mt-2" role="group">
+                        <button type="button" class="btn btn-primary" (click)="updateTeacherRole(t.uId)"><i class="fas fa-edit"></i></button>
+                      </div>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+                  <pagination-controls id="listing_pagination" maxSize="5" directionLinks="true" (pageChange)="page = $event">
+                  </pagination-controls>
+                </ng-template>
+
+          <hr/>
+
+
+
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h2 style="text-align: center;">Teacher Details</h2>
+            <ng-container *ngIf="msgStatus2; then thenTemplate; else elseTemplate"></ng-container>
+            <ng-template #thenTemplate>
+            <h5 style="text-align: center;">{{msg2}}</h5>
+            </ng-template>
+            <ng-template #elseTemplate>
+
+              <table class="table table-hover table-bordered ">
+                <thead>
+                  <tr class="bg-primary">
+                    <th>#ID</th>
+                    <th>Teacher Name</th>
+                    <th>Course Name</th>
+                    <th>Subject Name</th>
+                    <th>is Active</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let t of teacherSubject | paginate: {id: 'listing_pagination1', itemsPerPage: 3, currentPage: apage, totalItems: atotalRecords}">
+                    <td>{{t.aId}}</td>
+                    <td>{{t.fullName}}</td>
+                    <td>{{t.cName}}</td>
+                    <td>{{t.subName}}</td>
+                    <td>{{t.isActive}}</td>
+                    <td>
+                      <div class="btn-group mt-2" role="group">
+                        <button type="button" class="btn btn-primary" (click)="onUpdateModal(t)"><i class="fas fa-edit"></i></button>
+                        <!-- <button type="button" class="btn btn-danger" (click)="delTeacherSubject(t.aId)"><i>
+                            class="fas fa-trash-alt"></i></button> -->
+                            <ui-switch size="small" color="#0066ff" switchColor="white" defaultBgColor="#e6f0ff" (click)="delTeacherSubject(t.aId)"
+                              [checked]="t.isActive"></ui-switch>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+                <pagination-controls id="listing_pagination1" maxSize="5" directionLinks="true" (pageChange)="apage = $event">
+                </pagination-controls>
+            </ng-template>
+            <ng-template #editTemplate>
+              <div class="modal-header">
+                <h4 class="modal-title pull-left">Edit Assign Subject To Teacher</h4>
+                <button type="button" class="close pull-right" aria-label="Close" (click)="closeAlert2()">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+
+              <div class="modal-body">
+                <div *ngIf="alert" class="alert alert-success alert-dismissible fade show" role="alert">
+                  <strong>{{status}}</strong>{{modalMessage}}
+                  <button (click)="closeMe2()" type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+
+                </div>
+                <form autocomplete="off" [formGroup]='updateForm' (ngSubmit)="onUpdate()">
+                  <ul class="list-group">
+                    <li class="list-group-item" [hidden]="aId">
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="aId"><i class="fa fa-key"></i></span>
+                        </div>
+                        <input type="text" class="form-control" formControlName="aId" />
+                      </div>
+                    <li class="list-group-item">
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="Uid"><i class="fa fa-pencil-square-o"></i></span>
+                        </div>
+                        <select id="Uid" (focus)="onChangeEvent($event)" formControlName="Uid" class="form-control"
+                          (change)="changeUid($event)" required>
+                          <option value='' selected disabled>Select Teacher</option>
+
+                          <option *ngFor="let item of activeTeacher" value="{{item.uId}}">{{item.fullName}}</option>
+
+
+                        </select>
+                      </div>
+                      <div class="errorMessage"
+                        *ngIf="!updateForm.get('Uid').valid && (updateForm.get('Uid').dirty || updateForm.get('Uid').touched)">
+                        Please
+                        Select Teacher
+
+
+                      </div>
+                    </li>
+                    <!-- <li class="list-group-item">
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="Cid"><i class="fa fa-pencil-square-o"></i></span>
+                        </div>
+                        <select id="Cid" formControlName="Cid" class="form-control" (change)="changeCourse($event)" required>
+                          <option value='' selected disabled>Select Course</option>
+
+
+                          <option *ngFor="let item of allCourse" value="{{item.cId}}">{{item.cName}}</option>
+
+
+                        </select>
+                      </div>
+                      <div class="errorMessage"
+                        *ngIf="!updateForm.get('Cid').valid && (updateForm.get('Cid').dirty || updateForm.get('Cid').touched)">
+                        Please
+                        Select Course
+
+
+                      </div>
+                    </li> -->
+                    <li class="list-group-item">
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="Subid"><i class="fa fa-pencil-square-o"></i></span>
+                        </div>
+                        <select id="Subid" formControlName="Subid" class="form-control" (change)="changeSubject($event)">
+                          <option value='' selected disabled>Select Subject</option>
+
+                          <option *ngFor="let item of allSub" value="{{item.subId}}">{{item.subName}}</option>
+
+
+                        </select>
+                      </div>
+                      <div class="errorMessage"
+                        *ngIf="!updateForm.get('Subid').valid && (updateForm.get('Subid').dirty || updateForm.get('Subid').touched)">
+                        Please
+                        Choose Subject
+
+
+                      </div>
+                    </li>
+                    <li class="list-group-item">
+                      <button type="submit" [disabled]="!updateForm.valid" class="btn btn-primary btn-block">Edit</button>
+                    </li>
+                  </ul>
+                </form>
+              </div>
+            </ng-template>
+
+       </div>
+
+</div>
+</div>
+</div>
+</section>

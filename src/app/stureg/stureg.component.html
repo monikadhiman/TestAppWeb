@@ -1,0 +1,132 @@
+<div class="container signLog">
+  <div class="row">
+    <div class="col-md-12 signLog-inner">
+      <h2 style="text-align: center;">{{title}}</h2>
+      <hr />
+      <div *ngIf="alert" class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>{{status}}</strong>&nbsp;{{message}}
+        <button (click)="closeAlert()" type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <form autocomplete="off" [formGroup]="regForm" (ngSubmit)="onSubmit(regForm)">
+        <div class="form-group">
+          <div class="form-row">
+            <div class="col-md-2">
+              <label for="fullName" class="text-uppercase">First Name<span class="required">*</span></label>
+            </div>
+            <div class="col-md-5">
+              <input type="text" id="fullName" (focus)="onChangeEvent($event)" formControlName="fullName" class="form-control"
+                placeholder="Name should not be greater than 10 characters" autofocus required minlength="5"
+                maxlength="50">
+            </div>
+            <div class="col-md-5">
+              <span class="errorMessage"
+                *ngIf="!regForm.get('fullName').valid && (regForm.get('fullName').dirty || regForm.get('fullName').touched)">Please
+                enter Name</span>
+              <!-- <span *ngIf="fullName.hasError('required')">fullName is required.</span> -->
+              <br />
+              <span class="errorMessage" *ngIf="regForm.get('fullName').hasError('maxlength')">Only 50 characters
+                allowed for Name.</span>
+              <span class="errorMessage" *ngIf="regForm.get('fullName').hasError('minlength')">Atleast 5 characters
+                needed for Name.</span>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="form-row">
+            <div class="col-md-2">
+              <label for="email" class="text-uppercase">Email<span class="required">*</span></label>
+            </div>
+            <div class="col-md-5">
+              <input type="text" id="email" formControlName="email" class="form-control" placeholder="abc@gmail.com"
+                required email>
+            </div>
+            <div class="col-md-5">
+              <span class="errorMessage"
+                *ngIf="!regForm.get('email').valid && (regForm.get('email').dirty || regForm.get('email').touched)">Please
+                enter Email</span>
+              <!-- <span *ngIf="fullName.hasError('required')">fullName is required.</span> -->
+              <br />
+              <span class="errorMessage" *ngIf="regForm.get('email').hasError('email')">Please enter valid email.</span>
+
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="form-row">
+            <div class="col-md-2">
+              <label for="password" class="text-uppercase">Password<span class="required">*</span></label>
+            </div>
+            <div class="col-md-5">
+              <input type="password" id="password" formControlName="password" class="form-control" placeholder="*****"
+                required minlength="5" maxlength="10" reverse="true">
+            </div>
+            <div class="col-md-5">
+              <span class="errorMessage"
+                *ngIf="!regForm.get('password').valid && (regForm.get('password').dirty || regForm.get('password').touched)">Please
+                enter password</span>
+              <!-- <span *ngIf="fullName.hasError('required')">fullName is required.</span> -->
+              <br />
+              <span class="errorMessage" *ngIf="regForm.get('password').hasError('maxlength')">Only 10 characters
+                allowed for
+                fullName.</span>
+              <span class="errorMessage" *ngIf="regForm.get('password').hasError('minlength')">Atleast 5 characters
+                needed for
+                fullName.</span>
+
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="form-row">
+            <div class="col-md-2">
+              <label for="cpassword" class="text-uppercase">Confirm-Password<span class="required">*</span></label>
+            </div>
+            <div class="col-md-5">
+              <input type="text" id="cpassword" formControlName="cpassword" class="form-control"
+                placeholder="Re enter password" required validateEqual="password">
+            </div>
+            <div class="col-md-5">
+              <span class="errorMessage"
+                *ngIf="!regForm.get('cpassword').valid && (regForm.get('cpassword').dirty || regForm.get('cpassword').touched)">Confirm
+                Password is required.</span>
+              <!-- <span *ngIf="fullName.hasError('required')">fullName is required.</span> -->
+              <br />
+              <span *ngIf="cpassword.hasError('mustMatch')">Password Must Match.</span>
+
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="form-row">
+            <div class="col-md-2">
+              <label for="cId" class="text-uppercase">Course<span class="required">*</span></label>
+            </div>
+            <div class="col-md-5">
+              <select id="cId" formControlName="cId" class="form-control" (change)="changeCourse($event)">
+                <option value='' selected disabled>Select Course</option>
+
+                <option *ngFor="let item of course" value="{{item.cId}}">{{item.cName}}</option>
+
+
+              </select>
+            </div>
+            <div class="col-md-5">
+
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="nav justify-content-center">
+            <button type="submit" class="btn btn-primary" [disabled]="!regForm.valid">Register</button>&nbsp;
+            <button type="button" (click)="onClick()" class="btn btn-danger">Reset</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

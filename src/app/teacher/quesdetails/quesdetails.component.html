@@ -1,0 +1,134 @@
+<section class="dashboard-wrap mtb-40">
+  <div class="container">
+    <div class="body-content">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="dash-header">
+            <div class="dash-title">
+              <h1>{{title}}</h1>
+
+            </div>
+          </div>
+          <div class="dash-nav">
+            <hr>
+            <button class="btn btn-primary" (click)="onClick()">Back to dashboard </button>
+
+            <br /><br />
+            <h2 style="text-align: center;">Choose Options For Question Details</h2>
+            <form autocomplete="off" [formGroup]="updateForm">
+              <ul class="list-group">
+                <li class="list-group-item">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="TstId"><i class="fa fa-pencil-square-o"></i></span>
+                    </div>
+                    <select id="TstId" formControlName="TstId" (focus)="onChangeEvent($event)"  class="form-control" (change)="changetestId($event)"
+                      required>
+                      <option value='' selected disabled >Select Test</option>
+                      <option *ngFor="let item of testid" value="{{item.tstName}}">{{item.tstName}}</option>
+                    </select>
+                  </div>
+                  <span class="errorMessage" *ngIf="TstId.touched && TstId.errors">
+                    <span *ngIf="TstId.hasError('required')">Choose Test Name</span>
+
+                  </span>
+                </li>
+                <li class="list-group-item">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="CId"><i class="fa fa-pencil-square-o"></i></span>
+                    </div>
+                    <select id="CId" formControlName="CId" class="form-control" (change)="changecId($event)" required>
+                      <option value='' selected disabled>Select Course</option>
+                      <option *ngFor="let course of courseid" value="{{course.cId}}">{{course.cName}}</option>
+                    </select>
+                  </div>
+                  <span class="errorMessage" *ngIf="CId.touched && CId.errors">
+                    <span *ngIf="CId.hasError('required')">Choose Course Name.</span>
+
+                  </span>
+
+                </li>
+                <li class="list-group-item">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="SubId"><i class="fa fa-pencil-square-o"></i></span>
+                    </div>
+                    <select id="SubId" formControlName="SubId" class="form-control" (change)="changesubId($event)"
+                      required>
+                      <option value='' selected disabled>Select Subject</option>
+                      <option *ngFor="let sub of subid" value="{{sub.subId}}">{{sub.subName}}</option>
+                    </select>
+                  </div>
+                  <span class="errorMessage" *ngIf="SubId.touched && SubId.errors">
+                    <span *ngIf="SubId.hasError('required')">Choose Subject Name.</span>
+
+                  </span>
+                </li>
+
+
+                <!-- <li class="list-group-item">
+                  <button type="submit" [disabled]="!insertForm.valid" class="btn btn-primary btn-block">ADD</button>
+                </li> -->
+              </ul>
+            </form>
+            <ng-container *ngIf="delStatus; then thenTemplate; else elseTemplate"></ng-container>
+            <!-- <div *ngIf="delStatus ; then thenBlock else elseBlock"> </div> -->
+            <ng-template #thenTemplate>
+              <h2>{{status1}}</h2>
+            </ng-template>
+            <ng-template #elseTemplate>
+              <h5>Question Details</h5>
+              <table class="table table-hover table-bordered ">
+                <thead>
+                  <tr class="bg-primary">
+
+                    <th>#ID</th>
+                    <th>Test Name</th>
+                    <th>Course Name</th>
+                    <th>Subject Name</th>
+                    <th>Question</th>
+                    <th>Option1 </th>
+                    <th>Option2 </th>
+                    <th>Option3 </th>
+                    <th>Option4 </th>
+                    <th>Answer</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    *ngFor="let c of quesdata1  | paginate: {id: 'listing_pagination1', itemsPerPage: 3, currentPage: page1, totalItems: totalRecords1}">
+                    <td>{{c.quesId}}</td>
+                    <td>{{c.tstName}}</td>
+                    <td>{{c.cName}}</td>
+                    <td>{{c.subName}}</td>
+                    <td>{{c.ques}}</td>
+                    <td>{{c.opt1}}</td>
+                    <td>{{c.opt2}}</td>
+                    <td>{{c.opt3}}</td>
+                    <td>{{c.opt4}}</td>
+                    <td>{{c.answer}}</td>
+
+                    <td>
+                      <button type="button" class="btn btn-danger" (click)="deleteQuestion(c.quesId)"><i
+                          class="fas fa-trash-alt"></i></button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <pagination-controls id="listing_pagination1" maxSize="5" directionLinks="true"
+                (pageChange)="page1 = $event">
+              </pagination-controls>
+            </ng-template>
+
+            <!-- {{error}} -->
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</section>

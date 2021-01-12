@@ -1,0 +1,66 @@
+<div class="container login">
+  <div class="row">
+    <div class="col-md-12 login-inner">
+      <h2 style="text-align: center;">{{title}}</h2>
+      <hr />
+
+      <div *ngIf="alert" class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>Error!</strong>{{message}}
+        <button (click)="closeAlert()" type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <form autocomplete="off" [formGroup]="loginForm" (ngSubmit)='onSubmit()'>
+        <div class="form-group">
+          <div class="form-row">
+            <div class="col-md-2">
+              <label for="email" class="text-uppercase">User Name<span class="required">*</span></label>
+            </div>
+            <div class="col-md-5">
+              <input type="text" id="email" (focus)="onChangeEvent($event)" formControlName="email" class="form-control" placeholder="abc@gmail.com"
+                autofocus required>
+            </div>
+            <div class="col-md-5">
+              <span class="errorMessage"
+                *ngIf="!loginForm.get('email').valid && (loginForm.get('email').dirty || loginForm.get('email').touched)">Please
+                enter your email</span>
+              <!-- <span *ngIf="firstName.hasError('required')">FirstName is required.</span> -->
+
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="form-row">
+            <div class="col-md-2">
+              <label for="password" class="text-uppercase">Password<span class="required">*</span></label>
+            </div>
+            <div class="col-md-5">
+              <input type="password" id="password" formControlName="password" class="form-control" placeholder="*****"
+                autofocus required>
+            </div>
+            <div class="col-md-5">
+              <span class="errorMessage"
+                *ngIf="!loginForm.get('password').valid && (loginForm.get('password').dirty || loginForm.get('password').touched)">Please
+                enter Password</span>
+
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="nav justify-content-center">
+            <button type="submit" class="btn btn-primary" [disabled]='!loginForm.valid'>Login</button>&nbsp;
+            <button type="button" (click)="onClick()" class="btn btn-danger">Reset</button>
+          </div>
+        </div>
+
+      </form>
+      <div class="register-text">Dont Have An Accont ? <i class="fa fa-user-plus"></i> <a [routerLink]='["/userreg"]'>
+          Sign Up for Admin/Teacher
+          </a>|<i class="fa fa-user-plus"></i> <a [routerLink]='["/stureg"]'>
+            Sign Up for Student
+          </a>
+      </div>
+    </div>
+  </div>
+</div>
